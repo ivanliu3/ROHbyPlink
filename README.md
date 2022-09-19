@@ -1,7 +1,7 @@
 # ROHbyPlink
 Visualization and proportion calculation of ROH estimated by Plink.
 
-Here we provide a practice on data filter and visualization.
+Here we provide a guide for good practice on data filtering and visualization.
 
 ## Data filter
 The input data is in **VCF/BCF** format, we suggest three steps of **Sites** filter using **bcftools** and **plink**: 
