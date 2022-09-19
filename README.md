@@ -12,8 +12,8 @@ The input data is in **VCF/BCF** format, we suggest three steps of **Sites** fil
 ## Data and Softwares
   ```
   inputBcf = /path/to/bcf
-  bcftools = 
-  plink = 
+  bcftools = /path/to/bcftools
+  plink = /path/to/plink
   
   ```
 
@@ -44,7 +44,7 @@ The input data is in **VCF/BCF** format, we suggest three steps of **Sites** fil
   - Minimum alt count 4
   - Maximum 50% missing
   ```
-  #put the samples of a species/sub-species into a file, each line has one sample ID
+  #put the samples of a species/sub-species into a file: example.txt, each line has one sample ID
   sampleID = example.txt
   speciesFilteredBfile = Give_it_a_name
   $bcftools view $allellicBalanceFilterdBcf -S $sampleID -q 0.05:minor |$bcftools filter --include 'AC>=4' |$bcftools view -O v |$plink --vcf /dev/stdin --allow-extra-chr --chr-set 29 --double-id  --set-missing-var-ids @:# --make-bed --geno 0.5 --out $speciesFilteredBfile
@@ -57,10 +57,20 @@ The input data is in **VCF/BCF** format, we suggest three steps of **Sites** fil
   do
     grep $sample $speciesFilteredBfile.fam > $sample.keep.fam
     $plink --allow-extra-chr --bfile $speciesFilteredBfile --keep $sample.keep.fam --double-id --geno 0 --make-bed --out $sample --set-missing-var-ids @:#
+   done
   ```
 
 ## ROH estimation and visualization
-
-
-
+  - Estimated ROH by Plink for each individual and visualization of distribution of ROH
+  ```
+  cat $sampleID |while read sample
+  do
+    $plink --allow-extra-chr --bfile $sample --homozyg --homozyg-window-het 3 --homozyg-window-missing 20 --out $sample.homology.he3.mis20
+    Rscript ./src/ROH.v0.1.R --homfile $sample.homology.he3.mis20.hom -p $sample.bed -s $sample
+   done
+  ```
+  - Calculation of distribution of ROH in different length categories and visualization
+  ```
+  
+  ```
 
